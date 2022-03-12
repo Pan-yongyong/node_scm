@@ -4,11 +4,13 @@ const url = require('url')
 var md5 = require('md5');
 const Userdb = require('../../mdule/admin/user.js')
 
+//获取用户
 router.get('/', async function(req, res) {
 	let result = await Userdb.find({})
 	res.send(result)
 })
 
+//添加用户
 router.get('/add', function(req, res) {
 	let reqUrl = url.parse(req.url, true).query
 	if(reqUrl.username && reqUrl.password) {
