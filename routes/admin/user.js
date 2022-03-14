@@ -6,7 +6,9 @@ const Userdb = require('../../mdule/admin/user.js')
 
 //获取用户
 router.get('/', async function(req, res) {
-	let result = await Userdb.find({})
+	let pageInfo = url.parse(req.url, true).query
+	pageInfo.page === 1 ? pageInfo.page = 1 : pageInfo.page
+	let result = await Userdb.find({}).skip(pageInfo.page * pageInfo.pagesize).limit(pageInfo.pagesize)
 	res.send(result)
 })
 
