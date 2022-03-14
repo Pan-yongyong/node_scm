@@ -38,7 +38,7 @@ router.get('/add',async function(req, res) {
 router.post('/edit',function(req, res) {
 	// 通过_id修改
 	let {_id, username, password} = { ...req.body }
-	Userdb.update({_id:_id}, {$set: {
+	Userdb.updateOne({_id:_id}, {$set: {
 		username,
 		password
 	}}, (err, result) => {
@@ -55,7 +55,7 @@ router.delete('/delete',async function(req, res){
 	let delparams = url.parse(req.url, true).query
 	let data = await Userdb.find({_id: delparams._id})
 	if(data.length) {
-		Userdb.remove({_id: delparams._id}, function(err, restule) {
+		Userdb.deleteOne({_id: delparams._id}, function(err, restule) {
 			if(err){
 				res.status(404).send(err)
 				return
