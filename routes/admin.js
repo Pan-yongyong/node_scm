@@ -5,9 +5,9 @@ let login = require('./admin/login.js')
 let manager = require('./admin/manager.js')
 let nav = require('./admin/nav.js')
 let user = require('./admin/user.js')
-
+// Multiplechoice多选
 router.get('/', function(req, res) {
-	res.send('admin')
+	res.send('/')
 })
 
 router.use('/login', login)

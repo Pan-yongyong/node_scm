@@ -7,9 +7,17 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin.js')
 var bodyParser = require('body-parser')
+var session = require('express-session')
 
 
 var app = express();
+
+app.all('*', function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,6 +31,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+    secret: "keyboard cat",
+	resave: false,
+	saveUninitialized: true,
+	cookie: ('name', 'value',{maxAge:  5*60*1000,secure: false})
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -32,6 +46,7 @@ app.use('/admin', adminRouter)
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // error handler
 app.use(function(err, req, res, next) {
