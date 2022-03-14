@@ -33,9 +33,39 @@ router.get('/add',async function(req, res) {
 		res.send('参数不全')
 	}
 })
+//修改用户，通过id获取需要修改的数据
+// https://blog.csdn.net/y5946/article/details/89605151
+router.post('/edit',function(req, res) {
+	// 通过_id修改
+	let {_id, username, password} = { ...req.body }
+	Userdb.update({_id:_id}, {$set: {
+		username,
+		password
+	}}, (err, result) => {
+		if(err){
+			res.status(404).send(err)
+			return
+		}
+		res.status(200).send('修改成功')
+	})
+})
 
-router.post('/', function(req, res) {
-	console.log(req.body)
+// 删除用户
+router.delete('/delete',async function(req, res){
+	let delparams = url.parse(req.url, true).query
+	let data = await Userdb.find({_id: delparams._id})
+	if(data.length) {
+		Userdb.remove({_id: delparams._id}, function(err, restule) {
+			if(err){
+				res.status(404).send(err)
+				return
+			}
+			res.status(200).send('删除成功')
+			return
+		})
+	}else{
+		res.send(`找不到_id为${delparams._id}的数据`)
+	}
 })
 
 module.exports = router
